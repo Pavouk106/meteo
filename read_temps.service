@@ -1,0 +1,13 @@
+[Unit]
+Description=Read temps script
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/meteo
+ExecStart=/home/pi/software/meteo/read_temps.py
+Restart=on-failure
+
+[Install]
+RequiredBy=pool_control.service
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+[Unit]
+Description=Fan control script
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/meteo
+ExecStart=/home/pi/software/meteo/fan_control.py
+Restart=on-failure
+
+[Install]
+#RequiredBy=pool_control.service
+WantedBy=multi-user.target

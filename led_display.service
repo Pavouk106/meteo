@@ -1,0 +1,13 @@
+[Unit]
+Description=LED display
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/meteo
+ExecStart=/home/pi/software/meteo/led_display.py
+Restart=on-failure
+
+[Install]
+#RequiredBy=pool_control.service
+WantedBy=multi-user.target
