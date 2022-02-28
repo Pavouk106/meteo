@@ -70,7 +70,7 @@ while 1:
 			# Clear data_out variable
 			data_out = []
 			# If temperature reading was ok, prepare 24 bits for shift registers
-			if temps[i] != u"---":
+			if temps[i] != u"---" and temps[i] != None:
 				temp = float(temps[i])
 				debug_print("DEBUG: Temperature number " + str(i) + " ok, " + str(temp))
 				for byte in range(3):
@@ -123,6 +123,9 @@ while 1:
 			IO.output(clock_pin,IO.LOW)
 			IO.output(latch_pin,IO.HIGH)
 			IO.output(clock_pin,IO.HIGH)
+			IO.output(data_pin,IO.LOW);
+			IO.output(clock_pin,IO.LOW);
+			IO.output(latch_pin,IO.LOW);
 
 			time.sleep(2)
 

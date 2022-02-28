@@ -48,13 +48,13 @@ while 1:
 					temp = re.compile('t=(.*)')
 					temp_value = temp.search(file_lines[1])
 					debug_print(temp_value.group(1))
-					# Check if we got right temperature
-					if temp_value.group(1) != "85000":
+					# Check if we got right temperature; Dallas sometimes outputs 85000 or -127000, which are failed values
+					if abs(int(temp_value.group(1))) < 85000:
 						temps_values[i] = round(float(temp_value.group(1)) / 1000, 2)
 						break
 					# Temperature fail, wait and repeat
 					else:
-						debug_print("85 degrees registered")
+						debug_print("85 or -127 degrees registered")
 						fails += 1
 						time.sleep(0.5)
 				# CRC fail, wait and repeat
@@ -76,16 +76,19 @@ while 1:
 			hard_fails += 1
 			# 5 hard fails = 25 normal fails, something is worng -> we try power cycling
 			if hard_fails >= 5:
+				# Write "---" for temperature values
+				temps_velues = [0] * len(dallas_address)
+				temps_values = [u"---"] * len(dallas_address)
 				debug_print("!!! Power cycled !!!")
 				hard_fails = 0
 				# Turn off power for sensors
 				IO.output(sensor_pwr_pin,IO.HIGH)
 				# Wait
-				time.sleep(2)
+				time.sleep(5)
 				# Turn power back on
 				IO.output(sensor_pwr_pin,IO.LOW)
 				# Wait
-				time.sleep(3)
+				time.sleep(5)
 		# Just for cleaner debug
 		elif fails != 0 or hard_fails != 0:
 			debug_print("Fails: " + str(fails))
