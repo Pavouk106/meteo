@@ -10,6 +10,8 @@ path_to_files = '/tmp/'
 
 remote_state = 0
 
+retry = 0
+
 # Define pins to control outlets
 bottom_out = 5
 middle_out = 6
@@ -33,22 +35,26 @@ def debug_print(text):
 		print(text)
 
 def read_data():
-	global remote_state
+	global remote_state, retry
 	try:
 		with open(path_to_files + 'states', 'r') as states_file:
 			states_lines = states_file.read().splitlines()
 			remote_state = int(states_lines[2])
 			states_file.close()
+			retry = 0
 			debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " Remote state: " + str(remote_state))
 	except:
-		remote_state = 0
-		debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " " + path_to_files + "states read failed")
+		retry += 1
+		debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " " + path_to_files + "states read failed (retry: " + str(retry) + ")")
+		if retry >= 5: # If status wasn't read five times in a row, set it to 0 (off) 
+			remote_state = 0
 		pass
 
 while 1:
 	read_data()
 
 	debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " Remote state: " + str(remote_state))
+
 	# Set output depending on conditions like manual on/off, outside (freezing) temperature, temperature delta of pool, solar power (voltage on cell)
 	if remote_state == 1:
 		IO.output(top_out,IO.HIGH)

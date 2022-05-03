@@ -1,0 +1,12 @@
+[Unit]
+Description=Pool control
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/meteo
+ExecStart=/home/pi/software/meteo/pool_control.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
