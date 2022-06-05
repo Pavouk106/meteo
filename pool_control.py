@@ -5,6 +5,7 @@ import time, os.path
 import RPi.GPIO as IO
 
 debug = False
+log = True
 
 path_to_files = '/tmp/'
 
@@ -34,6 +35,15 @@ def debug_print(text):
 	if debug:
 		print(text)
 
+def log_action(text):
+	if log:
+		try:
+			log_file=open(path_to_files + 'log', 'a')
+			log_file.write(time.strftime("%d-%m-%Y, %H:%M:%S") + " " + text +  "\n")
+			log_file.close()
+		except:
+			pass
+
 def read_data():
 	global remote_state, retry
 	try:
@@ -48,6 +58,7 @@ def read_data():
 		debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " " + path_to_files + "states read failed (retry: " + str(retry) + ")")
 		if retry >= 5: # If status wasn't read five times in a row, set it to 0 (off) 
 			remote_state = 0
+			log_action("[pool_control.py] HTTP read failed 5 times")
 		pass
 
 while 1:

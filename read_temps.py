@@ -7,8 +7,9 @@ IO.setwarnings(False)
 IO.setmode(IO.BCM)
 
 debug = False
+log = True
 
-path_to_files = "/tmp/"
+path_to_files = '/tmp/'
 
 dallas_address = [
 "28-3c01a816c6cd", # bazen sani
@@ -29,6 +30,15 @@ IO.output(sensor_pwr_pin,IO.LOW)
 def debug_print(text):
 	if debug:
 		print(text)
+
+def log_action(text):
+	if log:
+		try:
+			log_file=open(path_to_files + 'log', 'a')
+			log_file.write(time.strftime("%d-%m-%Y, %H:%M:%S") + " " + text +  "\n")
+			log_file.close()
+		except:
+			pass
 
 while 1:
 	# Read dallas temperature sensors
@@ -80,6 +90,7 @@ while 1:
 				temps_velues = [0] * len(dallas_address)
 				temps_values = [u"---"] * len(dallas_address)
 				debug_print("!!! Power cycled !!!")
+				log_action("[read_temps.py] Power cycled")
 				hard_fails = 0
 				# Turn off power for sensors
 				IO.output(sensor_pwr_pin,IO.HIGH)

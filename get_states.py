@@ -4,6 +4,7 @@
 import time, os.path, urllib, re
 
 debug = False
+log = True
 
 path_to_files = '/tmp/'
 
@@ -15,6 +16,15 @@ retry = 0
 def debug_print(text):
 	if debug:
 		print(text)
+
+def log_action(text):
+	if log:
+		try:
+			log_file=open(path_to_files + 'log', 'a')
+			log_file.write(time.strftime("%d-%m-%Y, %H:%M:%S") + " " + text +  "\n")
+			log_file.close()
+		except:
+			pass
 
 while 1:
 	# Teploty z kotelny
@@ -29,12 +39,14 @@ while 1:
 			retry += 1
 			debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP states read failed, remote file not found (retry: " + str(retry) + ")")
 			if retry >= 5:
+				log_action("[get_states.py] HTTP read failed 5 times")
 				for i in range(0, 4):
 					states_file.write("%s\n" % "0") # Kdyz se nepodari otevrit soubor, zapsat 0
 	except:
 		retry += 1
 		debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " HTTP states read failed (retry: " + str(retry) + ")")
 		if retry >= 5:
+			log_action("[get_states.py] HTTP read failed 5 times")
 			for i in range(0, 4):
 				states_file.write("%s\n" % "0") # Kdyz se nepodari otevrit soubor, zapsat 0
 	states_file.close()
