@@ -58,7 +58,8 @@ def read_data():
 		debug_print("DEBUG: " + time.strftime("%H:%M:%S") + " " + path_to_files + "states read failed (retry: " + str(retry) + ")")
 		if retry >= 5: # If status wasn't read five times in a row, set it to 0 (off) 
 			remote_state = 0
-			log_action("[pool_control.py] HTTP read failed 5 times")
+			time_sleep(1) # Add one second to (probably?) offset this script with others, as all have 5 seconds delay and may encounter each other when accessing files
+			log_action("[pool_control.py] States file read failed 5 times")
 		pass
 
 while 1:
