@@ -61,6 +61,9 @@ while 1:
 					# Check if we got right temperature; Dallas sometimes outputs 85000 or -127000, which are failed values
 					if abs(int(temp_value.group(1))) < 85000:
 						temps_values[i] = round(float(temp_value.group(1)) / 1000, 2)
+						if i == 1:
+							debug_print("Offsetting temperature from " + str(temps_values[i]) + " to " + str(temps_values[i] - 0.5))
+							temps_values[i] = temps_values[i] - 0.5
 						break
 					# Temperature fail, wait and repeat
 					else:
