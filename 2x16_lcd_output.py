@@ -10,6 +10,7 @@ path_to_files = "/tmp/"
 
 
 mylcd = RPi_I2C_driver.lcd()
+mylcd.lcd_clear()
 
 temps = [None] * 3
 
