@@ -1,0 +1,13 @@
+[Unit]
+Description=2x16 LCD output
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/software/meteo
+ExecStart=/home/pi/software/meteo/2x16_lcd_output.py
+Restart=on-failure
+
+[Install]
+#RequiredBy=pool_control.service
+WantedBy=multi-user.target
