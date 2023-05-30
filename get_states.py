@@ -4,7 +4,7 @@
 import time, os.path, urllib, re
 
 debug = False
-log = True
+log = False
 
 path_to_files = '/tmp/'
 
