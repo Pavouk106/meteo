@@ -111,6 +111,9 @@ while 1:
 
 	# Write dallas temperature sensors readings to file
 	try:
+		temps_file_json = open(path_to_files + 'meteo.json', 'w')
+		temps_file_json.write('{ "Teplota bazénu": {"teplota": "%s"}, "Rozdíl teploty bazénu": {"teplota": "%s"}, "Vnější teplota (5cm)": {"teplota": "%s"} }' % (temps_values[0], round(temps_values[0]-temps_values[1], 3), temps_values[2]))
+		temps_file_json.close()
 		temps_file = open(path_to_files + 'meteo', 'w') # Predelat na rw kvuli timestamp
 		for i in range(0, len(temps_values) + 1):
 			# Predelat na timestamp (kdyz starsi nez pet minut, zapsat vadu) - nutno precist ze souboru
